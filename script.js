@@ -20,11 +20,30 @@ boton.addEventListener("click", () => {
 
     estado.raza = input.value;
 
-    estado.fotos = [
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7kVwY6E3UkmCgzAWgtGomGiRCMrGr8ZeYqsWeQUCCgEcPTwYvWzjBTEZljwOScmdW0PuSYcVD5CWmP8WEY5MS_0g9ISItFLhQNXgDMx9XSw&s=10",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqdne3UjrWnimqr5ZFRBk48RZTlM33gOSeA8SCPiiN4g&s=10",
-        "https://www.lanacion.com.ar/resizer/v2/el-american-pitbull-terrier-es-equilibrado-CIIZKVMQ4JGHJBLCWAK4PY4XIA.jpg?auth=15967ac158f1b3e1076f7a45e2a07a24602e230834a376e2a7d37f1702d8ab05&width=420&height=686&quality=70&smart=true"
-    ];
-
-    render();
+    buscarPerros();
 });
+
+function buscarPerros() {
+
+    fetch(`https://dog.ceo/api/breed/${estado.raza}/images`)
+        .then((response) => {
+
+            if (!response.ok) {
+                throw new Error("Raza no encontrada");
+            }
+
+            return response.json();
+        })
+        .then((datos) => {
+
+            estado.fotos = datos.message.slice(0, 5);
+
+            render();
+        })
+        .catch((error) => {
+
+            console.error("Error al buscar perros:", error);
+
+    });
+
+}
